@@ -41,6 +41,8 @@ def pdf_view(request, pk):
 
     # Client address
     textobject = cnv.beginText()
+    if invoice.address.contact_name:
+        textobject.textLine(invoice.address.contact_name)
     textobject.textLine(invoice.address.address_one)
     if invoice.address.address_two:
         textobject.textLine(invoice.address.address_two)
