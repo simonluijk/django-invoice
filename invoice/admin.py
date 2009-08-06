@@ -2,10 +2,12 @@ from django.contrib import admin
 from django.conf.urls.defaults import patterns
 from invoice.models import Invoice, InvoiceItem
 from invoice.views import pdf_view
+from invoice.forms import InvoiceAdminForm
 
 
 class InvoiceItemInline(admin.TabularInline):
     model = InvoiceItem
+
 
 class InvoiceAdmin(admin.ModelAdmin):
     inlines = [InvoiceItemInline,]
@@ -27,6 +29,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         'status',
         'total_amount',
     )
+    form = InvoiceAdminForm
 
     def get_urls(self):
         urls = super(InvoiceAdmin, self).get_urls()
