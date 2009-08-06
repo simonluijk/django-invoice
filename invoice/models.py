@@ -52,7 +52,7 @@ class Invoice(TimeStampedModel):
 
 
     class Meta:
-        ordering = ('invoice_date', 'status')
+        ordering = ('-invoice_date', 'id')
 
 
 class InvoiceItem(models.Model):
