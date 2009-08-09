@@ -41,6 +41,14 @@ class Invoice(TimeStampedModel):
 
 
     def save(self, *args, **kwargs):
+        try:
+            self.address
+        except Address.DoesNotExist:
+            try:
+                self.address = self.user.get_profile().address
+            except User.DoesNotExist:
+                pass
+
         if self.status == 'paid' and not self.paid_date:
             self.paid_date = date.today()
 
