@@ -58,8 +58,8 @@ class Invoice(TimeStampedModel):
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='items', unique=False)
     description = models.CharField(max_length=100)
-    unit_price = models.DecimalField(max_digits=5, decimal_places=2)
-    quantity = models.DecimalField(max_digits=5, decimal_places=2, default=1)
+    unit_price = models.DecimalField(max_digits=8, decimal_places=2)
+    quantity = models.DecimalField(max_digits=8, decimal_places=2, default=1)
 
 
     def total(self):
