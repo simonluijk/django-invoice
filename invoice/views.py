@@ -10,7 +10,7 @@ def pdf_view(request, pk):
 
     filename = 'Invoice-%s.pdf' % invoice.invoice_id
     response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'inline; filename="%s"' % filename
+    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
 
     draw_pdf(response, invoice)
     return response
