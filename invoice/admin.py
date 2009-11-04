@@ -26,6 +26,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         'user',
         'invoice_date',
         'due_date',
+        'paid_date',
         'status',
         'total_amount',
     )
