@@ -1,16 +1,10 @@
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-
 from invoice.models import Invoice
 from invoice.pdf import draw_pdf
+from invoice.utils import pdf_response
 
 
 def pdf_view(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
-
-    filename = 'Invoice-%s.pdf' % invoice.invoice_id
-    response = HttpResponse(mimetype='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="%s"' % filename
-
-    draw_pdf(response, invoice)
-    return response
+    file_name = 'Invoice %s.pdf' % invoice.invoice_id
+    return pdf_response(draw_pdf, file_name, invoice)
