@@ -7,8 +7,7 @@ from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
 
 from addressbook.models import Address
-from invoice.utils import friendly_id
-from invoice.utils.format import format_currency
+from invoice.utils import format_currency, friendly_id
 
 
 class Invoice(TimeStampedModel):

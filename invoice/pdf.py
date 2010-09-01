@@ -4,7 +4,7 @@ from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
 
 from invoice.conf import settings
-from invoice.utils.format import format_currency
+from invoice.utils import format_currency
 
 
 def draw_pdf(file_object, invoice):
