@@ -122,8 +122,8 @@ def draw_pdf(buffer, invoice):
         ('ALIGN', (-2,0), (-1,-1), 'RIGHT'),
         ('BACKGROUND', (0,0), (-1,0), (0.8, 0.8, 0.8)),
     ])
-    table.wrapOn(canvas, 15*cm, 19*cm)
-    table.drawOn(canvas, 1*cm, -10*cm)
+    tw, th, = table.wrapOn(canvas, 15*cm, 19*cm)
+    table.drawOn(canvas, 1*cm, -8*cm-th)
 
     canvas.showPage()
     canvas.save()
