@@ -24,7 +24,6 @@ class Invoice(TimeStampedModel):
     invoice_date = models.DateField(default=date.today)
     paid_date = models.DateField(blank=True, null=True)
 
-
     def __unicode__(self):
         return u'%s (%s)' % (self.invoice_id, self.total_amount())
 
@@ -36,7 +35,6 @@ class Invoice(TimeStampedModel):
         for item in self.items.all():
             total = total + item.total()
         return total
-
 
     def save(self, *args, **kwargs):
         try:
@@ -56,7 +54,6 @@ class Invoice(TimeStampedModel):
             self.invoice_id = friendly_id.encode(self.pk)
             super(Invoice, self).save(*args, **kwargs)
 
-
     class Meta:
         ordering = ('-invoice_date', 'id')
 
@@ -67,10 +64,9 @@ class InvoiceItem(models.Model):
     unit_price = models.DecimalField(max_digits=8, decimal_places=2)
     quantity = models.DecimalField(max_digits=8, decimal_places=2, default=1)
 
-
     def total(self):
         return Decimal(str(self.unit_price * self.quantity)).quantize(Decimal('0.01'))
 
-
     def __unicode__(self):
         return self.description
+
