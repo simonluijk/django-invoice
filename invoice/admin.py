@@ -16,7 +16,7 @@ class InvoiceAdmin(admin.ModelAdmin):
             'fields': ('user', 'address', 'status')
         }),
         ('Dates', {
-            'fields': ('invoice_date', 'due_date', 'paid_date')
+            'fields': ('invoice_date', 'paid_date')
         }),
     )
     search_fields = ('invoice_id', 'user__username')
@@ -25,7 +25,6 @@ class InvoiceAdmin(admin.ModelAdmin):
         'invoice_id',
         'user',
         'invoice_date',
-        'due_date',
         'paid_date',
         'status',
         'total_amount',

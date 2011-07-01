@@ -22,7 +22,6 @@ class Invoice(TimeStampedModel):
 
     invoice_id = models.CharField(max_length=6, null=True, blank=True, unique=True, editable=False)
     invoice_date = models.DateField(default=date.today)
-    due_date = models.DateField()
     paid_date = models.DateField(blank=True, null=True)
 
 
