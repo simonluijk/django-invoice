@@ -11,17 +11,11 @@ from invoice.utils import format_currency, friendly_id
 
 
 class Invoice(TimeStampedModel):
-    STATUSES = [
-        ('draft', 'Draft'),
-        ('invoiced', 'Invoiced'),
-        ('paid', 'Paid'),
-    ]
     user = models.ForeignKey(User)
     address = models.ForeignKey(Address, related_name='%(class)s_set')
-    status = models.CharField(max_length=20, choices=STATUSES, default='draft')
-
     invoice_id = models.CharField(max_length=6, null=True, blank=True, unique=True, editable=False)
     invoice_date = models.DateField(default=date.today)
+    invoiced = models.BooleanField(default=False)
     paid_date = models.DateField(blank=True, null=True)
 
     def __unicode__(self):
@@ -44,9 +38,6 @@ class Invoice(TimeStampedModel):
                 self.address = self.user.get_profile().address
             except User.DoesNotExist:
                 pass
-
-        if self.status == 'paid' and not self.paid_date:
-            self.paid_date = date.today()
 
         super(Invoice, self).save(*args, **kwargs)
 
