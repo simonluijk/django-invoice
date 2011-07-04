@@ -30,6 +30,9 @@ class Invoice(TimeStampedModel):
             total = total + item.total()
         return total
 
+    def file_name(self):
+        return u'Invoice %s.pdf' % self.invoice_id
+
     def save(self, *args, **kwargs):
         try:
             self.address
