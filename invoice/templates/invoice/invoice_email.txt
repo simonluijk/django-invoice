@@ -1,0 +1,16 @@
+Dear {{ invoice.user.get_full_name }},
+
+Your invoice is ready. Please see attachment.
+
+Invoice ID:     {{ invoice.invoice_id }}
+Invoice Date:   {{ invoice.invoice_date }}
+Client:         {{ invoice.user.get_full_name }}
+Total Due:      {{ INV_CURRENCY_SYMBOL }}{{ invoice.total }} {{ INV_CURRENCY }}
+
+If you have any questions or concerns, please contact: {{ SUPPORT_EMAIL }}
+
+Thank you for your order!
+{{ SITE_NAME }}
+
+--
+This message is private and confidential. If you have received this message in error, please notify us and remove it from your system.
