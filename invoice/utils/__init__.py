@@ -26,7 +26,11 @@ def send_invoices():
     from ..models import Invoice
     from ..pdf import draw_pdf
 
-    for invoice in Invoice.objects.filter(invoice_date__lte=date.today(), invoiced=False):
+    invoices = Invoice.objects.filter(invoice_date__lte=date.today(),
+                                      invoiced=False,
+                                      draft=False)
+
+    for invoice in invoices:
         pdf = StringIO()
         draw_pdf(pdf, invoice)
         pdf.seek(0)

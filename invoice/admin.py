@@ -13,7 +13,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     inlines = [InvoiceItemInline,]
     fieldsets = (
         (None, {
-            'fields': ('user', 'address', 'invoice_date', 'paid_date')
+            'fields': ('user', 'address', 'invoice_date', 'paid_date', 'draft')
         }),
     )
     search_fields = ('invoice_id', 'user__username')
@@ -21,6 +21,7 @@ class InvoiceAdmin(admin.ModelAdmin):
         'invoice_id',
         'total_amount',
         'user',
+        'draft',
         'invoice_date',
         'invoiced',
         'paid_date',
