@@ -10,10 +10,10 @@ from .conf import settings
 
 class InvoiceTestCase(TestCase):
     def setUp(self):
-        self.usr = User.objects.create(username='test',
-                                       first_name='John',
-                                       last_name='Doe',
-                                       email='example@example.com')
+        usr = User.objects.create(username='test',
+                                  first_name='John',
+                                  last_name='Doe',
+                                  email='example@example.com')
 
         country = Country.objects.get(pk=1)
         address = Address.objects.create(contact_name='John Doe',
@@ -22,7 +22,7 @@ class InvoiceTestCase(TestCase):
                                          postcode='PostCode',
                                          country=country)
 
-        self.inv = Invoice.objects.create(user=self.usr, address=address)
+        self.inv = Invoice.objects.create(user=usr, address=address)
 
     def testInvoiceId(self):
         inv = self.inv
