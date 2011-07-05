@@ -3,7 +3,6 @@ from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings as dsettings
 from email.mime.application import MIMEApplication
-from datetime import date
 from StringIO import StringIO
 
 from ..conf import settings
@@ -26,11 +25,7 @@ def send_invoices():
     from ..models import Invoice
     from ..pdf import draw_pdf
 
-    invoices = Invoice.objects.filter(invoice_date__lte=date.today(),
-                                      invoiced=False,
-                                      draft=False)
-
-    for invoice in invoices:
+    for invoice in Invoice.objects.get_due():
         pdf = StringIO()
         draw_pdf(pdf, invoice)
         pdf.seek(0)
