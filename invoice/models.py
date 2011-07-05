@@ -55,6 +55,7 @@ class Invoice(TimeStampedModel):
 
         if not self.invoice_id:
             self.invoice_id = friendly_id.encode(self.pk)
+            kwargs['force_insert'] = False
             super(Invoice, self).save(*args, **kwargs)
 
     class Meta:
