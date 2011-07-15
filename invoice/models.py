@@ -11,6 +11,9 @@ from invoice.utils import format_currency, friendly_id
 
 
 class InvoiceManager(models.Manager):
+    def get_invoiced(self):
+        return self.filter(invoiced=True, draft=False)
+
     def get_due(self):
         return self.filter(invoice_date__lte=date.today(),
                            invoiced=False,
