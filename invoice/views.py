@@ -7,3 +7,8 @@ from invoice.utils import pdf_response
 def pdf_view(request, pk):
     invoice = get_object_or_404(Invoice, pk=pk)
     return pdf_response(draw_pdf, invoice.file_name(), invoice)
+
+
+def pdf_user_view(request, invoice_id):
+    invoice = get_object_or_404(Invoice, invoice_id=invoice_id, user=request.user)
+    return pdf_response(draw_pdf, invoice.file_name(), invoice)
