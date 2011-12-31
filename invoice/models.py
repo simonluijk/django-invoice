@@ -1,13 +1,20 @@
 from datetime import date
 from decimal import Decimal
+from StringIO import StringIO
+from email.mime.application import MIMEApplication
 
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
+from django.template.loader import render_to_string
+from django.http import HttpResponse
+from django.core.mail import EmailMessage
 
 from addressbook.models import Address
-from invoice.utils import format_currency, friendly_id
+from .utils import format_currency, friendly_id
+from .conf import settings as app_settings
+from .pdf import draw_pdf
 
 
 class InvoiceManager(models.Manager):
@@ -18,6 +25,7 @@ class InvoiceManager(models.Manager):
         return self.filter(invoice_date__lte=date.today(),
                            invoiced=False,
                            draft=False)
+
 
 class Invoice(TimeStampedModel):
     user = models.ForeignKey(User)
@@ -65,6 +73,31 @@ class Invoice(TimeStampedModel):
     def file_name(self):
         return u'Invoice %s.pdf' % self.invoice_id
 
+    def send_invoice(self):
+        pdf = StringIO()
+        draw_pdf(pdf, self)
+        pdf.seek(0)
+
+        attachment = MIMEApplication(pdf.read())
+        attachment.add_header("Content-Disposition", "attachment",
+            filename=self.file_name())
+        pdf.close()
+
+        subject = app_settings.INV_EMAIL_SUBJECT % {"invoice_id": self.invoice_id}
+        email = EmailMessage(subject=subject, to=[self.user.email])
+        email.body = render_to_string("invoice/invoice_email.txt", {
+            "invoice": self,
+            "SITE_NAME": settings.SITE_NAME,
+            "INV_CURRENCY": app_settings.INV_CURRENCY,
+            "INV_CURRENCY_SYMBOL": app_settings.INV_CURRENCY_SYMBOL,
+            "SUPPORT_EMAIL": settings.MANAGERS[0][1],
+        })
+        email.attach(attachment)
+        email.send()
+
+        self.invoiced = True
+        self.save()
+
 
 class InvoiceItem(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='items', unique=False)
@@ -78,4 +111,3 @@ class InvoiceItem(models.Model):
 
     def __unicode__(self):
         return self.description
-
