@@ -22,7 +22,8 @@ class InvoiceManager(models.Manager):
 class Invoice(TimeStampedModel):
     user = models.ForeignKey(User)
     address = models.ForeignKey(Address, related_name='%(class)s_set')
-    invoice_id = models.CharField(max_length=6, null=True, blank=True, unique=True, editable=False)
+    invoice_id = models.CharField(unique=True, max_length=6,
+        null=True, blank=True, editable=False)
     invoice_date = models.DateField(default=date.today)
     invoiced = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
