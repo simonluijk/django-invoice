@@ -5,13 +5,6 @@ from invoice.views import pdf_view
 from invoice.forms import InvoiceAdminForm
 
 
-def send_invoice(modeladmin, request, queryset):
-    for invoice in queryset.all():
-        invoice.send_invoice()
-
-send_invoice.short_description = "Send invoice to client"
-
-
 class InvoiceItemInline(admin.TabularInline):
     model = InvoiceItem
 
@@ -34,13 +27,19 @@ class InvoiceAdmin(admin.ModelAdmin):
         'paid_date',
     )
     form = InvoiceAdminForm
-    actions = [send_invoice]
+    actions = ['send_invoice',]
 
     def get_urls(self):
         urls = super(InvoiceAdmin, self).get_urls()
         return patterns('',
             (r'^(.+)/pdf/$', self.admin_site.admin_view(pdf_view))
         ) + urls
+
+    def send_invoice(self, request, queryset):
+        for invoice in queryset.all():
+            invoice.send_invoice()
+
+    send_invoice.short_description = "Send invoice to client"
 
 
 admin.site.register(Invoice, InvoiceAdmin)
