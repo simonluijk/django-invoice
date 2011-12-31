@@ -34,17 +34,8 @@ class Invoice(TimeStampedModel):
     def __unicode__(self):
         return u'%s (%s)' % (self.invoice_id, self.total_amount())
 
-    def total_amount(self):
-        return format_currency(self.total())
-
-    def total(self):
-        total = Decimal('0.00')
-        for item in self.items.all():
-            total = total + item.total()
-        return total
-
-    def file_name(self):
-        return u'Invoice %s.pdf' % self.invoice_id
+    class Meta:
+        ordering = ('-invoice_date', 'id')
 
     def save(self, *args, **kwargs):
         try:
@@ -62,8 +53,17 @@ class Invoice(TimeStampedModel):
             kwargs['force_insert'] = False
             super(Invoice, self).save(*args, **kwargs)
 
-    class Meta:
-        ordering = ('-invoice_date', 'id')
+    def total_amount(self):
+        return format_currency(self.total())
+
+    def total(self):
+        total = Decimal('0.00')
+        for item in self.items.all():
+            total = total + item.total()
+        return total
+
+    def file_name(self):
+        return u'Invoice %s.pdf' % self.invoice_id
 
 
 class InvoiceItem(models.Model):
@@ -73,7 +73,8 @@ class InvoiceItem(models.Model):
     quantity = models.DecimalField(max_digits=8, decimal_places=2, default=1)
 
     def total(self):
-        return Decimal(str(self.unit_price * self.quantity)).quantize(Decimal('0.01'))
+        total = Decimal(str(self.unit_price * self.quantity))
+        return total.quantize(Decimal('0.01'))
 
     def __unicode__(self):
         return self.description
