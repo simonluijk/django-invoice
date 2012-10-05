@@ -1,0 +1,3 @@
+include LICENCE
+recursive-include invoice/templates/invoice *.txt
+recursive-include invoice/templates/admin/invoice/invoice *.html
