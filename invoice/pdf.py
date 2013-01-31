@@ -108,10 +108,10 @@ def draw_pdf(buffer, invoice):
         data.append([
             item.quantity,
             item.description,
-            format_currency(item.unit_price),
-            format_currency(item.total())
+            format_currency(item.unit_price, invoice.currency),
+            format_currency(item.total(), invoice.currency)
         ])
-    data.append([u'', u'', u'Total:', format_currency(invoice.total())])
+    data.append([u'', u'', u'Total:', format_currency(invoice.total(), invoice.currency)])
     table = Table(data, colWidths=[2*cm, 11*cm, 3*cm, 3*cm])
     table.setStyle([
         ('FONT', (0,0), (-1,-1), 'Helvetica'),

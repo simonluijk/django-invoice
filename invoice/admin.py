@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.conf.urls.defaults import patterns
-from invoice.models import Invoice, InvoiceItem
+from invoice.models import Invoice, InvoiceItem, Currency
 from invoice.views import pdf_view
 from invoice.forms import InvoiceAdminForm
 
@@ -13,7 +13,7 @@ class InvoiceAdmin(admin.ModelAdmin):
     inlines = [InvoiceItemInline,]
     fieldsets = (
         (None, {
-            'fields': ('user', 'address', 'invoice_date', 'paid_date', 'draft')
+            'fields': ('user', 'address', 'invoice_date', 'paid_date', 'draft', 'currency')
         }),
     )
     search_fields = ('invoice_id', 'user__username')
@@ -43,3 +43,4 @@ class InvoiceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Invoice, InvoiceAdmin)
+admin.site.register(Currency)

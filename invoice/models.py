@@ -17,6 +17,15 @@ from .conf import settings as app_settings
 from .pdf import draw_pdf
 
 
+class Currency(models.Model):
+    code = models.CharField(unique=True, max_length=3)
+    pre_symbol = models.CharField(blank=True, max_length=1)
+    post_symbol = models.CharField(blank=True, max_length=1)
+
+    def __unicode__(self):
+        return self.code
+
+
 class InvoiceManager(models.Manager):
     def get_invoiced(self):
         return self.filter(invoiced=True, draft=False)
@@ -29,6 +38,7 @@ class InvoiceManager(models.Manager):
 
 class Invoice(TimeStampedModel):
     user = models.ForeignKey(User)
+    currency = models.ForeignKey(Currency, blank=True, null=True)
     address = models.ForeignKey(Address, related_name='%(class)s_set')
     invoice_id = models.CharField(unique=True, max_length=6,
         null=True, blank=True, editable=False)
@@ -62,7 +72,7 @@ class Invoice(TimeStampedModel):
             super(Invoice, self).save(*args, **kwargs)
 
     def total_amount(self):
-        return format_currency(self.total())
+        return format_currency(self.total(), self.currency)
 
     def total(self):
         total = Decimal('0.00')
