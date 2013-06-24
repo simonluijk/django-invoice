@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
-
 from .conf import settings
+
 
 def invoice(request):
     return {

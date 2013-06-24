@@ -17,10 +17,11 @@ def draw_header(canvas):
     canvas.setStrokeColorRGB(0.9, 0.5, 0.2)
     canvas.setFillColorRGB(0.2, 0.2, 0.2)
     canvas.setFont('Helvetica', 16)
-    canvas.drawString(18*cm, -1*cm, 'Invoice')
-    canvas.drawInlineImage(settings.INV_LOGO, 1*cm, -1*cm, 250, 16)
+    canvas.drawString(18 * cm, -1 * cm, 'Invoice')
+    canvas.drawInlineImage(settings.INV_LOGO, 1 * cm, -1 * cm, 250, 16)
     canvas.setLineWidth(4)
-    canvas.line(0, -1.25*cm, 21.7*cm, -1.25*cm)
+    canvas.line(0, -1.25 * cm, 21.7 * cm, -1.25 * cm)
+
 
 def draw_address(canvas):
     """ Draws the business address """
@@ -39,10 +40,11 @@ def draw_address(canvas):
         u'Reg No: 00000000'
     )
     canvas.setFont('Helvetica', 9)
-    textobject = canvas.beginText(13*cm, -2.5*cm)
+    textobject = canvas.beginText(13 * cm, -2.5 * cm)
     for line in business_details:
         textobject.textLine(line)
     canvas.drawText(textobject)
+
 
 def draw_footer(canvas):
     """ Draws the invoice footer """
@@ -52,10 +54,11 @@ def draw_footer(canvas):
         u'Please pay via bank transfer or cheque. All payments should be made in CURRENCY.',
         u'Make cheques payable to Company Name Ltd.',
     )
-    textobject = canvas.beginText(1*cm, -27*cm)
+    textobject = canvas.beginText(1 * cm, -27 * cm)
     for line in note:
         textobject.textLine(line)
     canvas.drawText(textobject)
+
 
 inv_module = importlib.import_module(settings.INV_MODULE)
 header_func = inv_module.draw_header
@@ -66,7 +69,7 @@ footer_func = inv_module.draw_footer
 def draw_pdf(buffer, invoice):
     """ Draws the invoice """
     canvas = Canvas(buffer, pagesize=A4)
-    canvas.translate(0, 29.7*cm)
+    canvas.translate(0, 29.7 * cm)
     canvas.setFont('Helvetica', 10)
 
     canvas.saveState()
@@ -82,7 +85,7 @@ def draw_pdf(buffer, invoice):
     canvas.restoreState()
 
     # Client address
-    textobject = canvas.beginText(1.5*cm, -2.5*cm)
+    textobject = canvas.beginText(1.5 * cm, -2.5 * cm)
     if invoice.address.contact_name:
         textobject.textLine(invoice.address.contact_name)
     textobject.textLine(invoice.address.address_one)
@@ -96,14 +99,14 @@ def draw_pdf(buffer, invoice):
     canvas.drawText(textobject)
 
     # Info
-    textobject = canvas.beginText(1.5*cm, -6.75*cm)
+    textobject = canvas.beginText(1.5 * cm, -6.75 * cm)
     textobject.textLine(u'Invoice ID: %s' % invoice.invoice_id)
     textobject.textLine(u'Invoice Date: %s' % invoice.invoice_date.strftime('%d %b %Y'))
     textobject.textLine(u'Client: %s' % invoice.user.username)
     canvas.drawText(textobject)
 
     # Items
-    data = [[u'Quantity', u'Description', u'Amount', u'Total'],]
+    data = [[u'Quantity', u'Description', u'Amount', u'Total'], ]
     for item in invoice.items.all():
         data.append([
             item.quantity,
@@ -112,18 +115,18 @@ def draw_pdf(buffer, invoice):
             format_currency(item.total(), invoice.currency)
         ])
     data.append([u'', u'', u'Total:', format_currency(invoice.total(), invoice.currency)])
-    table = Table(data, colWidths=[2*cm, 11*cm, 3*cm, 3*cm])
+    table = Table(data, colWidths=[2 * cm, 11 * cm, 3 * cm, 3 * cm])
     table.setStyle([
-        ('FONT', (0,0), (-1,-1), 'Helvetica'),
-        ('FONTSIZE', (0,0), (-1,-1), 10),
-        ('TEXTCOLOR', (0,0), (-1,-1), (0.2, 0.2, 0.2)),
-        ('GRID', (0,0), (-1,-2), 1, (0.7, 0.7, 0.7)),
-        ('GRID', (-2,-1), (-1,-1), 1, (0.7, 0.7, 0.7)),
-        ('ALIGN', (-2,0), (-1,-1), 'RIGHT'),
-        ('BACKGROUND', (0,0), (-1,0), (0.8, 0.8, 0.8)),
+        ('FONT', (0, 0), (-1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 10),
+        ('TEXTCOLOR', (0, 0), (-1, -1), (0.2, 0.2, 0.2)),
+        ('GRID', (0, 0), (-1, -2), 1, (0.7, 0.7, 0.7)),
+        ('GRID', (-2, -1), (-1, -1), 1, (0.7, 0.7, 0.7)),
+        ('ALIGN', (-2, 0), (-1, -1), 'RIGHT'),
+        ('BACKGROUND', (0, 0), (-1, 0), (0.8, 0.8, 0.8)),
     ])
-    tw, th, = table.wrapOn(canvas, 15*cm, 19*cm)
-    table.drawOn(canvas, 1*cm, -8*cm-th)
+    tw, th, = table.wrapOn(canvas, 15 * cm, 19 * cm)
+    table.drawOn(canvas, 1 * cm, -8 * cm - th)
 
     canvas.showPage()
     canvas.save()

@@ -34,6 +34,5 @@ class InvoiceAdminForm(forms.ModelForm):
                 addresses = EmptyQuerySet(model=Address)
         self.fields['address'].queryset = addresses
 
-
     class Meta:
         model = Invoice

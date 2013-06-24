@@ -5,7 +5,6 @@ from django.contrib.auth.models import User
 from addressbook.models import Address, Country
 
 from .models import Invoice
-from .conf import settings
 
 
 class InvoiceTestCase(TestCase):
@@ -60,4 +59,3 @@ class InvoiceTestCase(TestCase):
         inv.invoice_date = tomorrow
         inv.save()
         self.assertEquals(len(Invoice.objects.get_due()), 0)
-

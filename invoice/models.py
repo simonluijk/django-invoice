@@ -8,7 +8,6 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
 from django.template.loader import render_to_string
-from django.http import HttpResponse
 from django.core.mail import EmailMessage
 
 from addressbook.models import Address
@@ -40,8 +39,8 @@ class Invoice(TimeStampedModel):
     user = models.ForeignKey(User)
     currency = models.ForeignKey(Currency, blank=True, null=True)
     address = models.ForeignKey(Address, related_name='%(class)s_set')
-    invoice_id = models.CharField(unique=True, max_length=6,
-        null=True, blank=True, editable=False)
+    invoice_id = models.CharField(unique=True, max_length=6, null=True,
+                                  blank=True, editable=False)
     invoice_date = models.DateField(default=date.today)
     invoiced = models.BooleanField(default=False)
     draft = models.BooleanField(default=False)
@@ -90,7 +89,7 @@ class Invoice(TimeStampedModel):
 
         attachment = MIMEApplication(pdf.read())
         attachment.add_header("Content-Disposition", "attachment",
-            filename=self.file_name())
+                              filename=self.file_name())
         pdf.close()
 
         subject = app_settings.INV_EMAIL_SUBJECT % {"invoice_id": self.invoice_id}
