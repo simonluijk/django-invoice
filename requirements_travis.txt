@@ -1,0 +1,3 @@
+django-addresses
+django-extensions
+reportlab

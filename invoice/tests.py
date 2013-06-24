@@ -14,7 +14,7 @@ class InvoiceTestCase(TestCase):
                                   last_name='Doe',
                                   email='example@example.com')
 
-        country = Country.objects.get(pk=1)
+        country = Country.objects.create(name='TestCountry')
         address = Address.objects.create(contact_name='John Doe',
                                          address_one='Street',
                                          town='Town',
