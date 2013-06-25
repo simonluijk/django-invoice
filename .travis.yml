@@ -7,6 +7,6 @@ env:
     - DJANGO_VERSION=1.5.1
 install:
     - pip install -q Django==$DJANGO_VERSION --use-mirrors
-    - pip install -q requirements_travis.txt
+    - pip install -q -r requirements_travis.txt
 script: runtests.py
 
