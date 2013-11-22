@@ -1,3 +1,0 @@
-include LICENCE
-include README.md
-recursive-include invoice/templates *

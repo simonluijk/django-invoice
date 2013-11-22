@@ -1,2 +1,2 @@
-__version__ = 0.3
-__license__ = 'BSD License'
+__version__ = '0.3.0'
+VERSION = __version__

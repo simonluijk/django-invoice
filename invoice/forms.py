@@ -1,5 +1,4 @@
 from django import forms
-from django.db.models.query import EmptyQuerySet
 from django.contrib.auth.models import User
 from account.models import UserProfile
 from addressbook.models import Address
@@ -16,7 +15,8 @@ class InvoiceAdminForm(forms.ModelForm):
         try:
             user = args[0]['user']
             if not address and user:
-                args[0]['address'] = User.objects.get(pk=user).get_profile().address.pk
+                address_pk = User.objects.get(pk=user).get_profile().address.pk
+                args[0]['address'] = address_pk
         except (IndexError, Address.DoesNotExist, UserProfile.DoesNotExist):
             pass
 
@@ -26,12 +26,12 @@ class InvoiceAdminForm(forms.ModelForm):
             user = int(args[0]['user'])
             addresses = User.objects.get(pk=user).get_profile().addresses
         except UserProfile.DoesNotExist:
-            addresses = EmptyQuerySet(model=Address)
+            addresses = Address.objects.none()
         except (IndexError, ValueError):
             try:
                 addresses = kwargs['instance'].user.get_profile().addresses
             except (KeyError, UserProfile.DoesNotExist):
-                addresses = EmptyQuerySet(model=Address)
+                addresses = Address.objects.none()
         self.fields['address'].queryset = addresses
 
     class Meta:

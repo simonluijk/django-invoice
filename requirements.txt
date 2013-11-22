@@ -1,3 +1,5 @@
 Django
 
--r requirements_travis.txt
+django-addresses
+django-extensions
+reportlab
