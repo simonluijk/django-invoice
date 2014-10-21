@@ -1,15 +1,15 @@
 Dear {{ invoice.user.get_full_name }},
 
-Your invoice is ready. Please see attachment.
+Your invoice is now ready. Please see attached PDF.
 
 Invoice ID:     {{ invoice.invoice_id }}
 Invoice Date:   {{ invoice.invoice_date }}
 Client:         {{ invoice.user.get_full_name }}
-Total Due:      {{ INV_CURRENCY_SYMBOL }}{{ invoice.total }} {{ INV_CURRENCY }}
+Total Due:      {{ invoice.currency.pre_symbol }} {{ invoice.total }} {{ invoice.currency.post_symbol }}{{ invoice.currency }}
 
 If you have any questions or concerns, please contact: {{ SUPPORT_EMAIL }}
 
-Thank you for your order!
+Thank you
 {{ SITE_NAME }}
 
 --
