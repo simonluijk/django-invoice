@@ -7,8 +7,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django_extensions.db.models import TimeStampedModel
-from django.template.loader import render_to_string
-from django.core.mail import EmailMessage
+from django.template.loader import render_to_string, get_template
+from django.template import TemplateDoesNotExist, Context
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 
 from addressbook.models import Address
 from .utils import format_currency, friendly_id
@@ -93,14 +95,20 @@ class Invoice(TimeStampedModel):
         pdf.close()
 
         subject = app_settings.INV_EMAIL_SUBJECT % {"invoice_id": self.invoice_id}
-        email = EmailMessage(subject=subject, to=[self.user.email])
-        email.body = render_to_string("invoice/invoice_email.txt", {
+        email_kwargs = {
             "invoice": self,
             "SITE_NAME": settings.SITE_NAME,
             "INV_CURRENCY": app_settings.INV_CURRENCY,
             "INV_CURRENCY_SYMBOL": app_settings.INV_CURRENCY_SYMBOL,
             "SUPPORT_EMAIL": settings.MANAGERS[0][1],
-        })
+        }
+        try:
+            template = get_template("invoice/invoice_email.html")
+            body = template.render(Context(email_kwargs))
+        except TemplateDoesNotExist:
+            body = render_to_string("invoice/invoice_email.txt", email_kwargs)
+        email = EmailMultiAlternatives(subject=subject, body=strip_tags(body), to=[self.user.email])
+        email.attach_alternative(body, "text/html")
         email.attach(attachment)
         email.send()
 
